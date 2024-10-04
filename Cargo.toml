@@ -2,5 +2,14 @@
 name = "cargo-symbols"
 version = "0.1.0"
 edition = "2021"
+authors = ["Ote Leo <ote.leo73@gmail.com>"]
+description = "A cargo sub-command to run ctags on the top-level project dependencies."
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/Ote-Leo/cargo-symbols"
+
+keywords = ["ctags", "cargo", "plugin", "subcommand"]
+categories = ["development-tools::cargo-plugins"]
+
 
 [dependencies]
