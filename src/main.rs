@@ -1,7 +1,7 @@
 use std::{
     env,
     error::Error,
-    fs, iter,
+    iter,
     process::{exit, Command},
     str,
 };
@@ -94,11 +94,6 @@ fn use_cargo_metadata() -> Result<String, AnyError> {
     Ok(metadata)
 }
 
-fn open_metadata_file(fpath: String) -> Result<String, AnyError> {
-    let metadata = fs::read_to_string(fpath)?;
-    Ok(metadata)
-}
-
 fn get_dependencies(metadata: &str) -> Vec<&str> {
     use JsonEvent::*;
     let scanner = JsonScanner::new(metadata);
@@ -173,13 +168,7 @@ fn create_tags(dependencies: &[&str]) -> Result<(), AnyError> {
 }
 
 fn real_main() -> Result<i32, AnyError> {
-    let mut args = env::args();
-    args.next();
-    let sample_file = args.next();
-    let metadata = sample_file
-        .map(open_metadata_file)
-        .unwrap_or_else(use_cargo_metadata)?;
-
+    let metadata = use_cargo_metadata()?;
     let dependencies = get_dependencies(&metadata);
     create_tags(&dependencies)?;
     Ok(0)
