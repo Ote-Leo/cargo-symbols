@@ -80,7 +80,9 @@ impl<'src> Iterator for JsonScanner<'src> {
 }
 
 fn use_cargo_metadata() -> Result<String, AnyError> {
-    let output = Command::new("cargo")
+    let cargo = env::var("CARGO").unwrap_or_else(|_| "cargo".to_owned());
+
+    let output = Command::new(cargo)
         .args(["metadata", "--format-version", "1"])
         .output()?;
 
