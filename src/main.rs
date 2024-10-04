@@ -151,6 +151,25 @@ fn get_dependencies(metadata: &str) -> Vec<&str> {
     return dependencies;
 }
 
+fn create_tags(dependencies: &[&str]) -> Result<(), AnyError> {
+    let right_length = "Cargo.toml".len();
+    for path in dependencies.iter() {
+        let length = path.len();
+        let dep_path = &path[..length - right_length];
+        let source_path = [dep_path, "src/"].concat();
+        eprintln!("running ctags on {source_path}");
+        let output = Command::new("ctags")
+            .args(["--recurse", "--append", "--languages=Rust", &source_path])
+            .output()?;
+
+        if !output.status.success() {
+            return Err(String::from_utf8(output.stderr)?.into());
+        }
+    }
+
+    Ok(())
+}
+
 fn real_main() -> Result<i32, AnyError> {
     let mut args = env::args();
     args.next();
@@ -160,9 +179,7 @@ fn real_main() -> Result<i32, AnyError> {
         .unwrap_or_else(use_cargo_metadata)?;
 
     let dependencies = get_dependencies(&metadata);
-    for dep in dependencies.into_iter() {
-        println!("{dep}");
-    }
+    create_tags(&dependencies)?;
     Ok(0)
 }
 
