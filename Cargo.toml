@@ -1,6 +1,6 @@
 [package]
 name = "cargo-symbols"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Ote Leo <ote.leo73@gmail.com>"]
 description = "A cargo sub-command to run ctags on the top-level project dependencies."
